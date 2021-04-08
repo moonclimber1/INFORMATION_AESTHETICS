@@ -1,4 +1,3 @@
-
 const COUNTRIES = [
   "Argentina",
   "Bolivia (Plurinational State of)",
@@ -11,7 +10,7 @@ const COUNTRIES = [
 ];
 
 const CANVAS_SIZE = 800;
-const MAX_RADIUS = 350;
+const MAX_RADIUS = 380;
 let CENTER;
 
 let table;
@@ -38,54 +37,53 @@ function setup() {
   // Spider
   drawSpiderWeb();
 
- 
   let values;
 
-  stroke("SkyBlue");
-  values = COUNTRIES.map((country) => getVal(country, "2000 Proportion SDG") / 100);
-  drawCurve(values);
+//   stroke("SkyBlue");
+//   noFill();
+//   values = COUNTRIES.map((country) => getVal(country, "2000 Proportion SDG") / 100);
+//   drawCurve(values);
 
-  stroke("SteelBlue");
-  values = COUNTRIES.map((country) => getVal(country, "2010 Proportion SDG") / 100);
-  drawCurve(values);
+//   stroke("SteelBlue");
+//   noFill();
+//   values = COUNTRIES.map((country) => getVal(country, "2010 Proportion SDG") / 100);
+//   drawCurve(values);
 
   stroke("SlateBlue");
+  fill("Indigo");
   values = COUNTRIES.map((country) => getVal(country, "2020 Proportion SDG") / 100);
   drawCurve(values);
 
   addLabels();
 }
 
-function addLabels(){
-    COUNTRIES.forEach((country, index) => {
-        const angle = TWO_PI * (index / COUNTRIES.length);
+function addLabels() {
+  // text aligment setting
+  textAlign(CENTER, CENTER);
 
-        push()
-
-        
-        console.log("🚀 ~ file: sketch.js ~ line 65 ~ COUNTRIES.forEach ~ angle", angle)
-        // translate(CENTER.x , CENTER.y - MAX_RADIUS)
-
-        const p = createVector(sin(angle), -cos(angle)).mult(MAX_RADIUS* 0.75);
-        strokeWeight(5)
-        translate(CENTER.x + p.x, CENTER.y + p.y)
-
-        rotate(angle - PI/2)
-        // ellipse(0,0, 30,30)
-        textAlign(CENTER, CENTER);
-        text(country)
-    
-        pop()
-    })
+  COUNTRIES.forEach((country, index) => {
+    // calculate angle & point
+    const angle = TWO_PI * (index / COUNTRIES.length);
+    const p = createVector(sin(angle), -cos(angle)).mult(MAX_RADIUS * 0.75);
+    // draw rotated text at position
+    push();
+    translate(CENTER.x + p.x, CENTER.y + p.y);
+    rotate(angle - PI / 2);
+    text(country, 0, 0);
+    pop();
+  });
 }
 
 function drawCurve(values) {
-  const points = getCurvePoints(values);
-  const curvePoints = [points[points.length - 1], ...points, points[0], points[1]];
-
-  // curveTightness(-0.5)
-  noFill();
+  // Settings
   strokeWeight(3);
+  // curveTightness(-0.5)
+
+  const points = getSpiderPoints(values);
+  const curvePoints = [points[points.length - 1], ...points, points[0], points[1]];
+  console.log("🚀 ~ file: sketch.js ~ line 83 ~ drawCurve ~ curvePoints", curvePoints);
+
+  drawInterPoints(points)
 
   beginShape();
   curvePoints.forEach((point) => {
@@ -100,13 +98,34 @@ function drawCurve(values) {
   });
 }
 
-function getCurvePoints(values) {
+function getSpiderPoints(values) {
   return values.map((val, index) => {
     const angle = TWO_PI * (index / values.length);
     const unitVec = createVector(sin(angle), -cos(angle));
     const pos = unitVec.mult(MAX_RADIUS).mult(val);
     return createVector(CENTER.x + pos.x, CENTER.y + pos.y);
   });
+}
+
+function drawInterPoints(points){
+   
+
+    const t1 = performance.now()
+    for (let i of range(0,100000000)){
+     
+    }
+    // for(let i = 0; i <= 100000000; i++){
+
+    // }
+    const t2 = performance.now()
+    console.log('time', t2-t1)
+
+    
+}
+
+function getInterPoint(points, t){
+    const curvePoints = [points[points.length - 1], ...points, points[0], points[1]];
+    map
 }
 
 function getArea(a, b, c) {
@@ -136,3 +155,21 @@ function keyPressed() {
     save();
   }
 }
+
+function* range(start, end, stepSize) {
+    stepSize = stepSize ? stepSize : 1
+    let steps = (end - start) / stepSize
+    for(let i = 0; i<= steps; i++){
+        yield i * stepSize + start;
+    }
+}
+
+function* range(start, end, stepSize) {
+    stepSize = stepSize ? stepSize : 1
+    let steps = (end - start) / stepSize
+    for(let i = 0; i<= steps; i++){
+        yield i * stepSize + start;
+    }
+}
+
+
