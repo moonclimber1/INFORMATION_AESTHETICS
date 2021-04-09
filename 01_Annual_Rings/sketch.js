@@ -55,13 +55,13 @@ function setup() {
   fill("Indigo");
   values = COUNTRIES.map((country) => getVal(country, "2020 Proportion SDG") / 100);
 
-  fill('hsl(200, 55%, 20%)')
+  fill('hsl(200, 20%, 20%)')
   drawWedge(-0.2, 0.2, getSpiderPoints(values), 0.001)
-  fill('hsl(200, 55%, 30%)')
+  fill('hsl(200, 20%, 25%)')
   drawWedge(0.2, 0.4, getSpiderPoints(values), 0.001)
-  fill('hsl(200, 55%, 40%)')
+  fill('hsl(200, 20%, 30%)')
   drawWedge(0.4, 0.6, getSpiderPoints(values), 0.001)
-  fill('hsl(200, 55%, 50%)')
+  fill('hsl(200, 20%, 35%)')
   drawWedge(0.6, 0.8, getSpiderPoints(values), 0.001)
 
   drawCurve(getSpiderPoints(values));
@@ -78,6 +78,14 @@ function addLabels() {
     // calculate angle & point
     const angle = TWO_PI * (index / COUNTRIES.length);
     const p = createVector(sin(angle), -cos(angle)).mult(MAX_RADIUS * 0.75);
+    
+
+    // draw spider line
+    strokeWeight(1)
+    stroke(150)
+    line(CENTER.x, CENTER.y, CENTER.x + p.x, CENTER.y + p.y)
+
+
     // draw rotated text at position
     push();
     translate(CENTER.x + p.x, CENTER.y + p.y);
