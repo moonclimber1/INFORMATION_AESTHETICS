@@ -11,12 +11,6 @@ function preload() {
 }
 
 function setup() {
-  // c1 = color(34,193,195);
-  // c2 = color(253,187,45);
-
-  print(table.getRowCount() + " total rows in table");
-  print(table.getColumnCount() + " total columns in table");
-  print(table);
 
   // Setup
   createCanvas(CANVAS_SIZE, CANVAS_SIZE, SVG);
@@ -25,39 +19,20 @@ function setup() {
   // Background
   background(40);
 
-  // Spider
-  drawSpiderWeb();
+  // // Spider
+  // drawSpiderWeb();
 
-  let values;
+  // let values;
 
-  //   stroke("SkyBlue");
-  //   noFill();
-  //   values = REGIONS.map((country) => getVal(country, "2000 Proportion SDG") / 100);
-  //   drawCurve(getSpiderPoints(values));
+  const spider1 = new CakeSpider(1);
+  const spider2 = new CakeSpider(2);
+  spider2.val = 77;
 
-  //   stroke("SteelBlue");
-  //   noFill();
-  //   values = REGIONS.map((country) => getVal(country, "2010 Proportion SDG") / 100);
-  //   drawCurve(getSpiderPoints(values));
+  spider1.draw();
+  spider2.draw();
 
-  //   stroke("SlateBlue");
-  //   fill("Indigo");
-  //   values = REGIONS.map((country) => getVal(country, "2020 Proportion SDG") / 100);
-
-  // //   fill("hsl(200, 20%, 20%)");
-  // //   drawWedge(-0.2, 0.2, getSpiderPoints(values), 0.001);
-  // //   fill("hsl(200, 20%, 25%)");
-  // //   drawWedge(0.2, 0.4, getSpiderPoints(values), 0.001);
-  // //   fill("hsl(200, 20%, 30%)");
-  // //   drawWedge(0.4, 0.6, getSpiderPoints(values), 0.001);
-  // //   fill("hsl(200, 20%, 35%)");
-  // //   drawWedge(0.6, 0.8, getSpiderPoints(values), 0.001);
-
-  //   drawCurve(getSpiderPoints(values));
-
-  drawWedgesDiagram();
-
-  //   addLabels();
+  // console.log("🚀 ~ file: sketch2.js ~ line 28 ~ setup ~ spider", spider)
+  // spider.draw();
 }
 
 function addLabels() {
