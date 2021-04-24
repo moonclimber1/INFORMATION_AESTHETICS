@@ -18,43 +18,43 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
     // drawWedge(getWedgeAt(2), color('green'))
     // drawWedge(getWedgeAt(3), color('cyan'))
     // drawWedge(getWedgeAt(4), color('purple'))
+    drawWedges()
+
     drawCurve();
 
-    const p1 = getSpiderPoint(0.7 *  TWO_PI, 40)
-    console.log("🚀 ~ file: CakeSpider.js ~ line 24 ~ CakeSpider ~ testPoint", p1)
-    fill('green')
-    ellipse(p1.x, p1.y, 15, 15)
-    console.log("🚀 ~ file: CakeSpider.js ~ line 35 ~ CakeSpider ~ getIndexOfPoint(testPoint)", getIndexOfPoint(p1))
-    const p2 = getInterPoint(getIndexOfPoint(p1))
-    fill('red')
-    ellipse(p2.x, p2.y, 10, 10)
+    // const p1 = getSpiderPoint(0.7 *  TWO_PI, 40)
+    // console.log("🚀 ~ file: CakeSpider.js ~ line 24 ~ CakeSpider ~ testPoint", p1)
+    // fill('green')
+    // ellipse(p1.x, p1.y, 15, 15)
+    // console.log("🚀 ~ file: CakeSpider.js ~ line 35 ~ CakeSpider ~ getIndexOfPoint(testPoint)", getIndexOfPoint(p1))
+    // const p2 = getInterPoint(getIndexOfPoint(p1))
+    // fill('red')
+    // ellipse(p2.x, p2.y, 10, 10)
 
-    fill('blue')
-    const p3 = getInterPoint(getIndexFromAngle(0.7 * TWO_PI))
-    ellipse(p3.x, p3.y, 10, 10)
+    // fill('blue')
+    // const p3 = getInterPoint(getIndexFromAngle(0.7 * TWO_PI))
+    // ellipse(p3.x, p3.y, 5, 5)
 
     // console.log("🚀 ~ file: CakeSpider.js ~ line 42 ~ CakeSpider ~ getIndexFromAngle(0)", getIndexFromAngle(TWO_PI * 0.5))
   };
 
   this.drawLabels = function () {
-    // text aligment setting
-    noStroke();
-    fill(255)
-    textAlign(CENTER, CENTER);
+    
 
     wedges.forEach((wedge) => {
     
-    
-    
       // draw spider line
-
-      strokeWeight(1);
+      strokeWeight(2);
       stroke(150);
-      // line(CENTER.x, CENTER.y, wedge.markerPoint.x, wedge.markerPoint.y);
+      line(CENTER.x, CENTER.y, wedge.markerPoint.x, wedge.markerPoint.y);
 
-      const lineEnd = getSpiderPoint(wedge.startAngle, 1000)
-      line(CENTER.x, CENTER.y, lineEnd.x, lineEnd.y);
-      
+      // const lineEnd = getSpiderPoint(wedge.startAngle, 1000)
+      // line(CENTER.x, CENTER.y, lineEnd.x, lineEnd.y);
+
+      // text aligment setting
+      noStroke();
+      fill(255)
+      textAlign(CENTER, CENTER);
 
       const textPoint = getSpiderPoint(wedge.markerPointAngle, wedge.value + 5);
 
@@ -66,6 +66,8 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
       pop();
     });
   };
+
+  
 
   function initWedgesProps() {
     // calculate area portions and save index
@@ -87,7 +89,7 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
     printWedgesAreas();
 
     let i = 0
-    while(i < 70){
+    while(i < 1000){
       let totalAngle = 0
       wedges.forEach(wedge => {
         if(wedge.curvedAreaPortion > wedge.areaPortion){
@@ -95,7 +97,7 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
         } else if(wedge.curvedAreaPortion === wedge.areaPortion){
           console.log("Pareil")
         }else{
-            wedge.size +=1
+            wedge.size += 1
         }
         totalAngle += wedge.angle
       })
@@ -110,7 +112,7 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
   function printWedgesAreas(){
     console.log('---------------------')
     wedges.forEach(wedge => {
-      console.log(wedge.name, 'areaPortion', wedge.areaPortion, 'curvedAreaPortion', wedge.curvedAreaPortion, 'curvedArea', wedge.curvedArea, 'size', wedge.size, 'angle', wedge.angle)
+      console.log(wedge.name, 'areaPortion', pc(wedge.areaPortion), 'curvedAreaPortion', pc(wedge.curvedAreaPortion), 'curvedArea', rd(wedge.curvedArea), 'size', rd(wedge.size), 'angle', rd(wedge.angle))
     })
     
   }
@@ -126,12 +128,12 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
       wedge.endAngle = angleSum + wedge.angle;
       wedge.markerPointAngle = (wedge.endAngle - wedge.startAngle) / 2 + wedge.startAngle;
       wedge.markerPoint = getSpiderPoint(wedge.markerPointAngle, wedge.value);
-      wedge.startIndex = null
-      wedge.endIndex = null
       angleSum += wedge.angle; 
     });
 
     wedges.forEach(wedge => {
+      wedge.startIndex = getIndexFromAngle(wedge.startAngle)
+      wedge.endIndex = getIndexFromAngle(wedge.endAngle)
       wedge.curvedArea = getCurvedArea(wedge)
     })
     const totalCurvedArea = wedges.reduce((acc, current) => acc + current.curvedArea, 0);
@@ -142,7 +144,7 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
   }
 
   function getIndexOfPoint(point){
-    const resolution = 0.01
+    const resolution = 0.005
 
     const pointVec = p5.Vector.sub(point, CENTER)
     let bestIndex = 0;
@@ -151,11 +153,7 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
       const interPoint = getInterPoint(i)
       const interPointVec = p5.Vector.sub(interPoint, CENTER)
 
-
       const angle =  Math.abs(p5.Vector.angleBetween(pointVec, interPointVec))
-    
-      // console.log("🚀 ~ file: CakeSpider.js ~ line 132 ~ getIndexOfPoint ~ angle", i,angle)
-
       if(angle < bestAngle){
         bestIndex = i
         bestAngle = angle
@@ -163,6 +161,13 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
     }
     return bestIndex
   }
+
+  // FIXME: hacky implementation
+  function getIndexFromAngle(angle){
+    return getIndexOfPoint(getSpiderPoint(angle, 1))
+  }
+
+  // Draft Code (not working yet)
 
   // function getIndexFromAngle(angle){
   //   const resolution = 0.01
@@ -184,14 +189,16 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
   //   return bestIndex
   // }
 
-  
 
   function getCurvedArea(wedge) {
-    const resolution = 0.001
+    const resolution = 0.01
 
     let totalArea = 0
 
-    for(let t = wedge.index - 0.5; t < wedge.index + 0.5; t += resolution){
+    // deal with overflow
+    const start = wedge.startIndex > wedge.endIndex ? (wedge.startIndex % wedges.length) - wedges.length : wedge.startIndex;
+
+    for(let t = start; t < wedge.endIndex; t += resolution){
     
       // Coordinates
       const A = getInterPoint(t)
@@ -276,19 +283,29 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
 
   function drawWedge(wedge, color) {
 
-    const resolution = 0.01
+    const resolution = 0.001
   
     strokeWeight(0);
     fill(color)
     beginShape();
     vertex(CENTER.x, CENTER.y);
-    for (let t of range(wedge.index -0.5, wedge.index + 0.5, resolution)) {
+
+    const start = wedge.startIndex > wedge.endIndex ? (wedge.startIndex % wedges.length) - wedges.length : wedge.startIndex;
+
+    for (let t of range(start, wedge.endIndex, resolution)) {
       const point = getInterPoint(t);
       vertex(point.x, point.y);
       // ellipse(point.x, point.y, 3, 3);
     }
     vertex(CENTER.x, CENTER.y);
     endShape();
+  }
+
+  function drawWedges(){
+    wedges.forEach((wedge, index) => {
+      const c = color((index / wedges.length) * 70 + 40)
+      drawWedge(wedge, c)
+    })
   }
 }
 
@@ -300,4 +317,12 @@ function* range(start, end, stepSize) {
   for (let i = 0; i <= steps; i++) {
     yield i * stepSize + start;
   }
+}
+
+function pc(num){
+  return Math.round(num * 10000) / 100
+}
+
+function rd(num){
+  return Math.round(num * 100) / 100
 }

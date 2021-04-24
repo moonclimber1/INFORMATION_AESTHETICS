@@ -1,4 +1,5 @@
-const REGIONS = ["Argentina", "Bolivia (Plurinational State of)", "Brazil", "Colombia", "Peru"];
+// const REGIONS = ["Argentina", "Bolivia (Plurinational State of)", "Brazil", "Colombia", "Peru"];
+const REGIONS = ["Argentina", "Bolivia (Plurinational State of)", "Brazil", "Ecuador", "Colombia", "Paraguay", "Peru"];
 
 const CANVAS_SIZE = 800;
 const MAX_RADIUS = 380;
