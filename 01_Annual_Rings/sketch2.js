@@ -24,12 +24,20 @@ function setup() {
 
   // let values;
 
-  const spider1 = new CakeSpider(1);
-  const spider2 = new CakeSpider(2);
-  spider2.val = 77;
+  // const spider1 = new CakeSpider(1);
+  // const spider2 = new CakeSpider(2);
+  // spider2.val = 77;
 
-  spider1.draw();
-  spider2.draw();
+  // spider1.draw();
+  // spider2.draw();
+
+  const spider = new CakeSpider(5)
+  spider.addWedge("Brazil", 70, 29838983)
+  spider.addWedge("Argentina", 40, 12838983)
+  spider.addWedge("Colombia", 55, 18000000)
+  spider.addWedge("Bolivia", 78, 29838983)
+  spider.draw();
+  spider.drawLabels();
 
   // console.log("🚀 ~ file: sketch2.js ~ line 28 ~ setup ~ spider", spider)
   // spider.draw();
@@ -79,8 +87,6 @@ function drawCurve(points) {
     fill(255);
     ellipse(point.x, point.y, 10, 10);
   });
-
-  //   drawInterPoints(points)
 }
 
 function drawWedgesDiagram() {
@@ -166,54 +172,54 @@ function drawInterPoints(points) {
 }
 // drawWedge(-0.1, 0.1, points, 0.01)
 
-function drawWedge(t1, t2, points, resolution) {
-  const curvePoints = [points[points.length - 1], ...points, points[0], points[1]];
+// function drawWedge(t1, t2, points, resolution) {
+//   const curvePoints = [points[points.length - 1], ...points, points[0], points[1]];
 
-  const interPoints = [];
-  for (let t of range(t1 - resolution, t2 + resolution, resolution)) {
-    const point = getInterPoint(points, curvePoints, t);
-    interPoints.push(point);
-  }
+//   const interPoints = [];
+//   for (let t of range(t1 - resolution, t2 + resolution, resolution)) {
+//     const point = getInterPoint(points, curvePoints, t);
+//     interPoints.push(point);
+//   }
 
-  strokeWeight(0);
-  beginShape();
-  vertex(CENTER.x, CENTER.y);
-  interPoints.forEach((point) => {
-    vertex(point.x, point.y);
-  });
-  vertex(CENTER.x, CENTER.y);
-  endShape();
-}
+//   strokeWeight(0);
+//   beginShape();
+//   vertex(CENTER.x, CENTER.y);
+//   interPoints.forEach((point) => {
+//     vertex(point.x, point.y);
+//   });
+//   vertex(CENTER.x, CENTER.y);
+//   endShape();
+// }
 
-function getInterPoint(points, curvePoints, t) {
-  // points index
+// function getInterPoint(points, curvePoints, t) {
+//   // points index
 
-  let index = (t * points.length) % points.length;
-  index = index >= 0 ? index : points.length + index;
+//   let index = (t * points.length) % points.length;
+//   index = index >= 0 ? index : points.length + index;
 
-  // indices on curve points
-  const lowIndex = Math.floor(index) + 1;
-  const highIndex = lowIndex + 1;
-  const location = index % 1;
+//   // indices on curve points
+//   const lowIndex = Math.floor(index) + 1;
+//   const highIndex = lowIndex + 1;
+//   const location = index % 1;
 
-  const interPoint = createVector(0, 0);
-  interPoint.x = curvePoint(
-    curvePoints[lowIndex - 1].x,
-    curvePoints[lowIndex].x,
-    curvePoints[highIndex].x,
-    curvePoints[highIndex + 1].x,
-    location
-  );
-  interPoint.y = curvePoint(
-    curvePoints[lowIndex - 1].y,
-    curvePoints[lowIndex].y,
-    curvePoints[highIndex].y,
-    curvePoints[highIndex + 1].y,
-    location
-  );
+//   const interPoint = createVector(0, 0);
+//   interPoint.x = curvePoint(
+//     curvePoints[lowIndex - 1].x,
+//     curvePoints[lowIndex].x,
+//     curvePoints[highIndex].x,
+//     curvePoints[highIndex + 1].x,
+//     location
+//   );
+//   interPoint.y = curvePoint(
+//     curvePoints[lowIndex - 1].y,
+//     curvePoints[lowIndex].y,
+//     curvePoints[highIndex].y,
+//     curvePoints[highIndex + 1].y,
+//     location
+//   );
 
-  return interPoint;
-}
+//   return interPoint;
+// }
 
 function getArea(a, b, c) {
   return Math.sqrt((a + b + c) * (a + b - c) * (b + c - a) * (c + a - b)) / 4;
@@ -260,14 +266,6 @@ function getTotal(valueName) {
 function keyPressed() {
   if (key === "S") {
     save();
-  }
-}
-
-function* range(start, end, stepSize) {
-  stepSize = stepSize ? stepSize : 1;
-  let steps = (end - start) / stepSize;
-  for (let i = 0; i <= steps; i++) {
-    yield i * stepSize + start;
   }
 }
 
