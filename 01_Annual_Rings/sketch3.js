@@ -1,5 +1,9 @@
 // const REGIONS = ["Argentina", "Bolivia (Plurinational State of)", "Brazil", "Colombia", "Peru"];
-const REGIONS = ["Argentina", "Bolivia (Plurinational State of)", "Brazil", "Ecuador", "Colombia", "Paraguay", "Peru"];
+// const REGIONS = ["Argentina", "Bolivia (Plurinational State of)", "Brazil", "Ecuador", "Colombia", "Paraguay", "Peru"];
+
+// const REGIONS = ['Asia', 'Africa', 'Europe', 'South America'];
+const REGIONS = ['Russian Federation', 'China', 'United States of America', 'Canada', 'Brazil', 'Australia', 'India', 'Argentina'];
+
 
 const CANVAS_SIZE = 800;
 const MAX_RADIUS = 380;
@@ -25,15 +29,26 @@ function setup() {
 
   
 
-  const spider = new CakeSpider(5)
+  const spider = new CakeSpider(6)
 
   REGIONS.forEach(regionName => {
-    const percent = getVal(regionName, "2020 Proportion SDG")
-    const area = getVal(regionName, "2020 Land Area")
-    spider.addWedge(regionName, percent, area)
+    const area2020 = getVal(regionName, "2020 Land Area")
+    const percent2020 = getVal(regionName, "2020 Proportion SDG")
+    // const percent2010 = getVal(regionName, "2010 Proportion SDG")
+    const percent2000 = getVal(regionName, "2000 Proportion SDG")
+
+    spider.addWedge(regionName, area2020, percent2020, [ percent2000])
   });
+
+  spider.drawGuide(25)
+  spider.drawGuide(50)
+  spider.drawGuide(75)
+  spider.drawGuide(100)
+
   spider.draw();
   spider.drawLabels();
+  
+  
 }
 
 function getVal(regionName, valueName) {

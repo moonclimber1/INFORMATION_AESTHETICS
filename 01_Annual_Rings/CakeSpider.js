@@ -1,11 +1,12 @@
 function CakeSpider(unitRadius, baseRadius, baseVal) {
   let wedges = [];
 
-  this.addWedge = (name, value, area) => {
+  this.addWedge = (name, area, value, additionalValues) => {
     wedges.push({
       name: name,
-      value: value,
       area: area,
+      value: value,
+      additionalValues: additionalValues,
     });
   };
 
@@ -13,14 +14,19 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
     initWedgesProps();
     calculateDistribution();
 
-    // drawWedge(getWedgeAt(0), color('red'))
-    // drawWedge(getWedgeAt(1), color('blue'))
-    // drawWedge(getWedgeAt(2), color('green'))
-    // drawWedge(getWedgeAt(3), color('cyan'))
-    // drawWedge(getWedgeAt(4), color('purple'))
     drawWedges()
 
-    drawCurve();
+    stroke(200)
+    const points = wedges.map((wedge) => wedge.markerPoint);
+    drawMarkerLines();
+    drawCurve(points);
+
+    for(let i = 0; i < wedges[0].additionalValues.length; i+=1){
+      const points = wedges.map((wedge) => getSpiderPoint(wedge.markerPointAngle, wedge.additionalValues[i]));
+      console.log("🚀 ~ file: CakeSpider.js ~ line 24 ~ CakeSpider ~ points", points)
+      stroke(100)
+      drawCurve(points)
+    }
 
     // const p1 = getSpiderPoint(0.7 *  TWO_PI, 40)
     // console.log("🚀 ~ file: CakeSpider.js ~ line 24 ~ CakeSpider ~ testPoint", p1)
@@ -39,17 +45,8 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
   };
 
   this.drawLabels = function () {
-    
 
     wedges.forEach((wedge) => {
-    
-      // draw spider line
-      strokeWeight(2);
-      stroke(150);
-      line(CENTER.x, CENTER.y, wedge.markerPoint.x, wedge.markerPoint.y);
-
-      // const lineEnd = getSpiderPoint(wedge.startAngle, 1000)
-      // line(CENTER.x, CENTER.y, lineEnd.x, lineEnd.y);
 
       // text aligment setting
       noStroke();
@@ -66,6 +63,25 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
       pop();
     });
   };
+
+  function drawMarkerLines(){
+    wedges.forEach(wedge => {
+      // draw spider line
+      strokeWeight(3);
+      stroke(120);
+      line(CENTER.x, CENTER.y, wedge.markerPoint.x, wedge.markerPoint.y);
+    })
+  }
+
+  this.drawGuide = function(val){
+    noFill();
+    strokeWeight(1);
+    stroke(150);
+
+    const d = val * unitRadius * 2;
+
+    ellipse(CENTER.x, CENTER.y, d, d);
+  }
 
   
 
@@ -85,12 +101,10 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
       wedge.angle = TWO_PI / wedges.length;
     });
     updateWedgesProps();
-
     printWedgesAreas();
 
     let i = 0
     while(i < 1000){
-      let totalAngle = 0
       wedges.forEach(wedge => {
         if(wedge.curvedAreaPortion > wedge.areaPortion){
           wedge.size -= 1
@@ -99,7 +113,6 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
         }else{
             wedge.size += 1
         }
-        totalAngle += wedge.angle
       })
       updateWedgesProps();
       i+=1
@@ -137,7 +150,6 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
       wedge.curvedArea = getCurvedArea(wedge)
     })
     const totalCurvedArea = wedges.reduce((acc, current) => acc + current.curvedArea, 0);
-    // console.log("🚀 ~ file: CakeSpider.js ~ line 109 ~ updateWedgesProps ~ totalCurvedArea", totalCurvedArea)
     wedges.forEach(wedge => {
       wedge.curvedAreaPortion = wedge.curvedArea / totalCurvedArea
     })
@@ -259,8 +271,8 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
     return interPoint;
   }
 
-  function drawCurve() {
-    const points = wedges.map((wedge) => wedge.markerPoint);
+  function drawCurve(points) {
+    
     const curvePoints = [points[points.length - 1], ...points, points[0], points[1]];
 
     // Settings
