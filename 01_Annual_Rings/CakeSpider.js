@@ -1,5 +1,11 @@
+
+
 function CakeSpider(unitRadius, baseRadius, baseVal) {
+
   let wedges = [];
+
+  const colors = [color('#3180BD'), color('#3BC4A8'), color('#3DAD4A'), color('#99C43B'), color('#BDA838')]
+  console.log("🚀 ~ file: CakeSpider.js ~ line 8 ~ CakeSpider ~ colors", colors)
 
   this.addWedge = (name, area, value, additionalValues) => {
     wedges.push({
@@ -11,6 +17,8 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
   };
 
   this.draw = function () {
+
+    // shuffleArray(wedges)
     initWedgesProps();
     calculateDistribution();
 
@@ -68,7 +76,7 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
     wedges.forEach(wedge => {
       // draw spider line
       strokeWeight(3);
-      stroke(120);
+      stroke(200);
       line(CENTER.x, CENTER.y, wedge.markerPoint.x, wedge.markerPoint.y);
     })
   }
@@ -293,30 +301,40 @@ function CakeSpider(unitRadius, baseRadius, baseVal) {
     });
   }
 
-  function drawWedge(wedge, color) {
+  function drawWedge(wedge) {
 
     const resolution = 0.001
   
     strokeWeight(0);
-    fill(color)
     beginShape();
     vertex(CENTER.x, CENTER.y);
 
     const start = wedge.startIndex > wedge.endIndex ? (wedge.startIndex % wedges.length) - wedges.length : wedge.startIndex;
 
-    for (let t of range(start, wedge.endIndex, resolution)) {
+    for (let t of range(start, wedge.endIndex + resolution, resolution)) {
       const point = getInterPoint(t);
       vertex(point.x, point.y);
       // ellipse(point.x, point.y, 3, 3);
     }
     vertex(CENTER.x, CENTER.y);
     endShape();
+
+    // strokeWeight(2);
+    // stroke(200);
+    // const p1 = getInterPoint(wedge.startIndex)
+    // line(CENTER.x, CENTER.y, p1.x, p1.y);
+    // const p2 = getInterPoint(wedge.endIndex)
+    // line(CENTER.x, CENTER.y, p2.x, p2.y);
   }
 
   function drawWedges(){
+    const c1 = colors[1]
+    const c2 = colors[4]
+
     wedges.forEach((wedge, index) => {
-      const c = color((index / wedges.length) * 70 + 40)
-      drawWedge(wedge, c)
+      const c = lerpColor(c1, c2, index/wedges.length);
+      fill(c)
+      drawWedge(wedge)
     })
   }
 }
@@ -337,4 +355,13 @@ function pc(num){
 
 function rd(num){
   return Math.round(num * 100) / 100
+}
+
+const shuffleArray = array => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
 }
